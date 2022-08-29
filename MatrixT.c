@@ -6,7 +6,7 @@
 
 int main() {
 
-	unsigned short i, j, n;
+	unsigned short i, j, n, k;
 
     printf("Matrix Thread: \n");
     printf("Enter the dimension of the matrix: ");
@@ -23,11 +23,13 @@ int main() {
     time_t rawtime;
     time ( &rawtime );
     void* multiply(void *arg){
-        for(i = 0; i < n;i++) {
-    	    for(j = 0; j < n;j++) {
-                result[i][j] = matrix1[i][j]*matrix2[j][i];
-    	    }
-        }    
+        for(j = 0; j < n; j++) {
+                int m = 0;
+                for(k = 0; k < n; k++) {
+                    m += matrix1[i][k]*matrix2[k][j];
+                }
+                result[i][j] = m;
+            }
         return arg;
     }
     pthread_t threads[n];
@@ -35,6 +37,8 @@ int main() {
         pthread_create(&threads[i], NULL, multiply, NULL);
         pthread_join(threads[i], NULL);
     }
+    time_t rawtime2;
+    time ( &rawtime2 );
     /*
     for(i = 0; i < n;i++) {
         for(j = 0; j < n;j++) {
