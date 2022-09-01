@@ -16,6 +16,7 @@ int main() {
     int result[n][n];
     for(i = 0; i < n;i++) {
     	for(j = 0; j < n;j++) {
+            srand(time(0));
             matrix1[i][j] = rand()%100;
             matrix2[i][j] = rand()%100;
     	}
