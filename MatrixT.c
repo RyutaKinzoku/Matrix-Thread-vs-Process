@@ -7,6 +7,9 @@
 int main() {
 
 	unsigned short i, j, n, k;
+    time_t rawtime1;
+    time_t rawtime2;
+    struct timespec spec;
 
     printf("Matrix Thread: \n");
     printf("Enter the dimension of the matrix: ");
@@ -21,7 +24,10 @@ int main() {
             matrix2[i][j] = rand()%100;
     	}
     }
-    time_t rawtime;
+
+    clock_gettime(CLOCK_REALTIME, &spec);
+    rawtime1  = spec.tv_sec;
+
     time ( &rawtime );
     void* multiply(void *arg){
         for(j = 0; j < n; j++) {
@@ -38,8 +44,10 @@ int main() {
         pthread_create(&threads[i], NULL, multiply, NULL);
         pthread_join(threads[i], NULL);
     }
-    time_t rawtime2;
-    time ( &rawtime2 );
+    
+    clock_gettime(CLOCK_REALTIME, &spec);
+    rawtime2  = spec.tv_sec;
+    
     /*
     for(i = 0; i < n;i++) {
         for(j = 0; j < n;j++) {
