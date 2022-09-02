@@ -25,17 +25,12 @@ void *multiply(void *arg)
     struct arguments *actual_args = arg;
     int p = actual_args->p;
     int actual_row = 0;
-    /*res = fopen("Mat_T.txt", "a+");*/
     for (int j = 0; j < actual_args->p; j++)
     {
         for (int i = 0; i < actual_args->p; i++){
             
             actual_args->res[j] += actual_args->row[i]*actual_args->cols[j][i];
-            printf("%d ", actual_args->row[i]);
-            printf("%d ", actual_args->cols[j][i]);
-            printf("%d\n", actual_args->res[j]);
         }
-        /*fprintf(res,"%d\t", actual_args->res[j]);*/
     }
     int q=p-1;
     while (q >= 0)
@@ -45,8 +40,6 @@ void *multiply(void *arg)
         q--;
     }
     pthread_exit(NULL);
-    /*unsigned long i = (long)actual_args->i;
-    printf("Thread %ld\n", i);*/
 }
 
 int main()
@@ -63,7 +56,7 @@ int main()
     scanf("%hu", &n);
     int matrix1[n][n];
     int matrix2[n][n];
-
+    srand(time(0));
     for (int i = 0; i < n; i++)
     {
         for (j = 0; j < n; j++)
@@ -74,7 +67,7 @@ int main()
             
         }
     }
-    res = fopen("Mat_T.txt", "w");
+    res = fopen("Mat_R.txt", "w");
     clock_gettime(CLOCK_REALTIME, &spec);
     rawtime1 = spec.tv_sec;
     pthread_t threads[n];
@@ -95,7 +88,6 @@ int main()
         args.i = i;
         pthread_create(&threads[args.i], NULL, &multiply, &args);
         sleep(0);
-        
     }
     int q=n-1;
     while (q >= 0)
@@ -106,20 +98,6 @@ int main()
 
     clock_gettime(CLOCK_REALTIME, &spec);
     rawtime2  = spec.tv_sec;
-    printf("\n");
-    for(int i = 0; i < n;i++) {
-        for(j = 0; j < n;j++) {
-            printf("%d ", matrix1[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    for(int i = 0; i < n;i++) {
-        for(j = 0; j < n;j++) {
-            printf("%d ", matrix2[i][j]);
-        }
-        printf("\n");
-    }
     printf("\n");
     for(int i = 0; i < n;i++) {
         for(j = 0; j < n;j++) {
