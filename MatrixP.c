@@ -19,7 +19,6 @@ int main() {
     int result[n][n];
     FILE* res = fopen("result.txt", "w");
     pid_t pids[n];
-    int connect[n];
     char buffer[100000];
     char str[100001] = {'\0'};
 
@@ -34,12 +33,7 @@ int main() {
     time ( &rawtime );
     for(i = 0; i < n; i++)
     {
-        pipe(connect);
-        if(connect < 0){
-            printf("Error creating pipe");
-        }
         pids[i] = fork();
-        //printf("PIIIIIIIIIDDDDDD %d %d\n", i, pid);
         if(pids[i] < 0)
         {
             fprintf(stderr, "Error creating subprocess");
@@ -51,16 +45,9 @@ int main() {
                 for(k = 0; k < n; k++) {
                     result[i][j] += matrix1[i][k]*matrix2[k][j];
                 }
-                //printf("result[%d][%d] %d\n", i, j, result[i][j]);
                 fprintf(res, "%d\t", result[i][j]);
-                int len = sprintf( str, "%d ", result[i][j] );
-                w = write( connect[1], str, len );
-                if( w != len )
-                    printf("\nWrite error");
             }
             fprintf(res, "\n");
-            *str=0;
-            write(connect[1], str, 1);
             exit(0);
         }
     }
@@ -70,7 +57,6 @@ int main() {
     while (n > 0) {
         pid = wait(&status);
         i = n-1;
-        sscanf( buffer, "%d %d %d %d", &result[i][0], &result[i][1], &result[i][2], &result[i][3]);
         --n;
     }
     return 0;
