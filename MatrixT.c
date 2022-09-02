@@ -100,12 +100,6 @@ int main()
     printf("%f\n", time);
     for(int i = 0; i < n;i++) {
         for(j = 0; j < n;j++) {
-            printf("%d ", result[i][j]);
-        }
-        printf("\n");
-    }
-    for(int i = 0; i < n;i++) {
-        for(j = 0; j < n;j++) {
             fprintf(res, "%d\t", result[i][j]);
         }
         fprintf(res, "\n");
