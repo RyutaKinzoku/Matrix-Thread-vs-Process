@@ -16,31 +16,30 @@ struct arguments
     int res[825];
 };
 
-struct arguments args;
+struct arguments *args;
 
 void *multiply(void *arg)
 {
     struct arguments *actual_args;
     actual_args = (struct arguments *)arg;
     int p = actual_args->p;
-    for(int i=0;i<p;i++){
-            row[i] =  actual_args->row[i];
-        }
+    int actual_row = 0;
+    pthread_mutex_lock(&mutex);
+    printf("Thread: %ld \n", actual_args->i);
+    pthread_mutex_unlock(&mutex);
     for (int j = 0; j < actual_args->p; j++)
     {
         for (int i = 0; i < actual_args->p; i++){
-            actual_args->res[j] += row[actual_row]*actual_args->cols[j][actual_row];
+            actual_args->res[j] += actual_args->row[i]*actual_args->cols[j][i];
             pthread_mutex_lock(&mutex);
-            /*printf("%d ", row[actual_row]);*/
-            printf("%d ", actual_args->res[j]);
-            /*printf("%d\n", cols[j][i]);*/
+            printf("a_row: %d ", actual_args->row[i]);
+            printf("a_col: %d ", actual_args->cols[j][i]);
+            printf("res: %d\n", actual_args->res[j]);
             pthread_mutex_unlock(&mutex);
         }
-        actual_row++;
     }
     /*unsigned long i = (long)actual_args->i;
     printf("Thread %ld\n", i);*/
-    pthread_exit(NULL);
 }
 
 int main()
@@ -73,24 +72,28 @@ int main()
     clock_gettime(CLOCK_REALTIME, &spec);
     rawtime1 = spec.tv_sec;
     pthread_t threads[n];
-    args.p = n;
+    args->p = n;
+    printf("cols: ");
+    for (int q = 0; q < n; q++)
+    {
+        for (int s = 0; s < n; s++)
+        {
+            args->cols[q][s] = matrix2[s][q];
+            printf("%d ",args->cols[q][s]);
+        }
+    }
     for (long i = 0; i < n; i++)
     {
-        for (int q = 0; q < n; q++)
-        {
-            for (int s = 0; s < n; s++)
-            {
-                args.cols[q][s] = matrix2[s][q];
-            }
-        }
+        printf("\n");
+        printf("row: ");
         for (int p = 0; p < n; p++)
         {
-            args.row[p] = matrix1[i][p];
-            /*printf("%d",args.row[p]);*/
+            args->row[p] = matrix1[i][p];
+            printf("%d ",args->row[p]);
         }
         printf("\n");
-        args.i = i;
-        pthread_create(&threads[i], NULL, multiply, &args);
+        args->i = i;
+        pthread_create(&threads[args->i], NULL, multiply, (void *) args);
         result[i][i] = global;
     }
     for (int q = 0; q < n; q++)
