@@ -17,7 +17,8 @@ int main() {
     int matrix1[n][n];
     int matrix2[n][n];
     int result[n][n];
-    pid_t pid;
+    FILE* res = fopen("result.txt", "w");
+    pid_t pids[n];
     int connect[n];
     char buffer[100000];
     char str[100001] = {'\0'};
@@ -37,62 +38,40 @@ int main() {
         if(connect < 0){
             printf("Error creating pipe");
         }
-        pid = fork();
+        pids[i] = fork();
         //printf("PIIIIIIIIIDDDDDD %d %d\n", i, pid);
-        if(pid < 0)
+        if(pids[i] < 0)
         {
             fprintf(stderr, "Error creating subprocess");
         }
-        else if(pid==0) //child's work
+        else if(pids[i] == 0) //children's work
         {
+            res = fopen("result.txt", "a+");
             for(j = 0; j < n; j++) {
                 for(k = 0; k < n; k++) {
                     result[i][j] += matrix1[i][k]*matrix2[k][j];
                 }
                 //printf("result[%d][%d] %d\n", i, j, result[i][j]);
+                fprintf(res, "%d\t", result[i][j]);
                 int len = sprintf( str, "%d ", result[i][j] );
                 w = write( connect[1], str, len );
                 if( w != len )
                     printf("\nWrite error");
             }
+            fprintf(res, "\n");
             *str=0;
             write(connect[1], str, 1);
             exit(0);
         }
-        if(pid > 0)//parent's work
-        {
-            wait(0);
-            if( ( dLen = read( connect[0], buffer, sizeof ( buffer ) ) ) <=0 )
-            {
-                fprintf( stderr,"Read failed: %s\n", strerror( errno ) );
-                exit(1);
-            }
-			sscanf( buffer, "%d %d %d %d", &result[i][0], &result[i][1], &result[i][2], &result[i][3]);
-        }
     }
-    /*
-    printf("\n");
-    printf("\n");
-    for(i = 0; i < n;i++) {
-        for(j = 0; j < n;j++) {
-            printf("%d\t", matrix1[i][j]);
-        }
-        printf("\n");
+    //parent's work
+    int status;
+    pid_t pid;
+    while (n > 0) {
+        pid = wait(&status);
+        i = n-1;
+        sscanf( buffer, "%d %d %d %d", &result[i][0], &result[i][1], &result[i][2], &result[i][3]);
+        --n;
     }
-    printf("\n");
-    for(i = 0; i < n;i++) {
-        for(j = 0; j < n;j++) {
-            printf("%d\t", matrix2[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    for(i = 0; i < n;i++) {
-        for(j = 0; j < n;j++) {
-            printf("%d\t", result[i][j]);
-        }
-        printf("\n");
-    }
-    */
     return 0;
 }
