@@ -47,8 +47,8 @@ int main()
 
     unsigned short j, n, k;
 
-    time_t rawtime1;
-    time_t rawtime2;
+    /*time_t rawtime1;
+    time_t rawtime2;*/
     struct timespec spec;
 
     printf("Matrix Thread: \n");
@@ -68,8 +68,7 @@ int main()
         }
     }
     res = fopen("Mat_R.txt", "w");
-    clock_gettime(CLOCK_REALTIME, &spec);
-    rawtime1 = spec.tv_sec;
+    clock_t begin = clock();
     pthread_t threads[n];
     args.p = n;
     for (int q = 0; q < n; q++)
@@ -96,9 +95,9 @@ int main()
         q--;
     }
 
-    clock_gettime(CLOCK_REALTIME, &spec);
-    rawtime2  = spec.tv_sec;
-    printf("\n");
+    clock_t end = clock();
+    double time = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("%f\n", time);
     for(int i = 0; i < n;i++) {
         for(j = 0; j < n;j++) {
             printf("%d ", result[i][j]);
