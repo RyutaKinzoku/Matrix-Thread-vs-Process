@@ -97,7 +97,7 @@ int main()
 
     clock_t end = clock();
     double time = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("%f\n", time);
+    printf("%f nanoseconds\n", time);
     for(int i = 0; i < n;i++) {
         for(j = 0; j < n;j++) {
             fprintf(res, "%d\t", result[i][j]);

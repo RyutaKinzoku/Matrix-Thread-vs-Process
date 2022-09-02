@@ -9,7 +9,9 @@
 #define PROCNAME "parallel-sum-fork"
 
 int main() {
-	unsigned short i, j, k, n, w, dLen;
+	unsigned short i, j, k, n;
+    
+    struct timespec spec;
 
     printf("Matrix Process: \n");
     printf("Enter the dimension of the matrix: ");
@@ -17,10 +19,11 @@ int main() {
     int matrix1[n][n];
     int matrix2[n][n];
     int result[n][n];
-    FILE* res = fopen("result.txt", "w");
+    FILE* res = fopen("Mat_R.txt", "w");
     pid_t pids[n];
     char buffer[100000];
     char str[100001] = {'\0'};
+    srand(time(0));
 
     for(i = 0; i < n;i++) {
     	for(j = 0; j < n;j++) {
@@ -29,8 +32,9 @@ int main() {
             result[i][j] = 0;
     	}
     }
-    time_t rawtime;
-    time ( &rawtime );
+
+    clock_t begin = clock();
+
     for(i = 0; i < n; i++)
     {
         pids[i] = fork();
@@ -40,7 +44,7 @@ int main() {
         }
         else if(pids[i] == 0) //children's work
         {
-            res = fopen("result.txt", "a+");
+            res = fopen("Mat_R.txt", "a+");
             for(j = 0; j < n; j++) {
                 for(k = 0; k < n; k++) {
                     result[i][j] += matrix1[i][k]*matrix2[k][j];
@@ -59,5 +63,8 @@ int main() {
         i = n-1;
         --n;
     }
+    clock_t end = clock();
+    double time = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("%f nanoseconds\n", time);
     return 0;
 }
