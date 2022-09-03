@@ -1,3 +1,3 @@
 #Compile Processes
-MatrixP.c:
+MatrixP: MatrixP.c
 	gcc MatrixP.c -o MatrixP

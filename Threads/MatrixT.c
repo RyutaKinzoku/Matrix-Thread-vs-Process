@@ -52,7 +52,7 @@ int main()
     struct timespec spec;
 
     printf("Matrix Thread: \n");
-    printf("Enter the dimension of the matrix: ");
+    //printf("Enter the dimension of the matrix: ");
     //scanf("%hu", &n);
     n=10;
     int matrix1[n][n];
@@ -99,7 +99,7 @@ int main()
     clock_t end = clock();
     double time = (double)(end - begin) / CLOCKS_PER_SEC;
     FILE* stats = fopen("Stats.txt", "a+");
-    fprintf(stats, "%f", time);
+    fprintf(stats, "%f\n", time);
     printf("%f nanoseconds\n", time);
     for(int i = 0; i < n;i++) {
         for(j = 0; j < n;j++) {

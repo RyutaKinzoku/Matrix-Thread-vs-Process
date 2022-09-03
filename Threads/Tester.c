@@ -17,7 +17,7 @@ int main () {
       strcat(command, nu);
       strcat(command, ".txt");
       printf("%s\n",command);
-      int name = rename("Mat_R.txt", "Mat_R.txt");
+      int name = rename("Mat_R.txt", command);
       n--;
    }
    return(0);
