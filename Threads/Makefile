@@ -1,3 +1,3 @@
 #Compile Threads
-MatrixT.c: MatrixT.c
+MatrixT: MatrixT.c
 	gcc -o MatrixT MatrixT.c -lpthread
