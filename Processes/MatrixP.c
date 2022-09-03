@@ -15,7 +15,8 @@ int main() {
 
     printf("Matrix Process: \n");
     printf("Enter the dimension of the matrix: ");
-    scanf("%hu", &n);
+    //scanf("%hu", &n);
+    n=10;
     int matrix1[n][n];
     int matrix2[n][n];
     int result[n][n];
@@ -65,6 +66,8 @@ int main() {
     }
     clock_t end = clock();
     double time = (double)(end - begin) / CLOCKS_PER_SEC;
+    FILE* stats = fopen("Stats.txt", "a+");
+    fprintf(stats, "%f", time);
     printf("%f nanoseconds\n", time);
     return 0;
 }
