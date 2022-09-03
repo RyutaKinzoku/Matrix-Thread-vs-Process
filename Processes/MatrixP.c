@@ -6,7 +6,6 @@
 #include <errno.h>
 #include <string.h>
 
-#define PROCNAME "parallel-sum-fork"
 
 int main() {
 	unsigned short i, j, k, n;
@@ -24,13 +23,19 @@ int main() {
     pid_t pids[n];
     char buffer[100000];
     char str[100001] = {'\0'};
-    time_t t;
-    srand((unsigned) time(&t));
 
+    unsigned int randval;
+    FILE *f;
     for(i = 0; i < n;i++) {
     	for(j = 0; j < n;j++) {
-            matrix1[i][j] = rand()%10;
-            matrix2[i][j] = rand()%10;
+            f = fopen("/dev/random", "r");
+            fread(&randval, sizeof(randval), 1, f);
+            fclose(f);
+            matrix1[i][j] = randval%10;
+            f = fopen("/dev/random", "r");
+            fread(&randval, sizeof(randval), 1, f);
+            fclose(f);
+            matrix2[i][j] = randval%10;
             result[i][j] = 0;
     	}
     }

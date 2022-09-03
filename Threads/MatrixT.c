@@ -57,17 +57,20 @@ int main()
     n=10;
     int matrix1[n][n];
     int matrix2[n][n];
-    time_t t;
-    srand((unsigned) time(&t));
-    for (int i = 0; i < n; i++)
-    {
-        for (j = 0; j < n; j++)
-        {
-            /*srand(time(0));*/
-            matrix1[i][j] = rand() % 10;
-            matrix2[i][j] = rand() % 10;
-            
-        }
+    unsigned int randval;
+    FILE *f;
+    for(int i = 0; i < n;i++) {
+    	for(j = 0; j < n;j++) {
+            f = fopen("/dev/random", "r");
+            fread(&randval, sizeof(randval), 1, f);
+            fclose(f);
+            matrix1[i][j] = randval%10;
+            f = fopen("/dev/random", "r");
+            fread(&randval, sizeof(randval), 1, f);
+            fclose(f);
+            matrix2[i][j] = randval%10;
+            result[i][j] = 0;
+    	}
     }
     res = fopen("Mat_R.txt", "w");
     clock_t begin = clock();
