@@ -52,11 +52,13 @@ int main()
     struct timespec spec;
 
     printf("Matrix Thread: \n");
-    printf("Enter the dimension of the matrix: ");
-    scanf("%hu", &n);
+    //printf("Enter the dimension of the matrix: ");
+    //scanf("%hu", &n);
+    n=10;
     int matrix1[n][n];
     int matrix2[n][n];
-    srand(time(0));
+    time_t t;
+    srand((unsigned) time(&t));
     for (int i = 0; i < n; i++)
     {
         for (j = 0; j < n; j++)

@@ -14,8 +14,9 @@ int main() {
     struct timespec spec;
 
     printf("Matrix Process: \n");
-    printf("Enter the dimension of the matrix: ");
-    scanf("%hu", &n);
+    //printf("Enter the dimension of the matrix: ");
+    //scanf("%hu", &n);
+    n=10;
     int matrix1[n][n];
     int matrix2[n][n];
     int result[n][n];
@@ -23,7 +24,8 @@ int main() {
     pid_t pids[n];
     char buffer[100000];
     char str[100001] = {'\0'};
-    srand(time(0));
+    time_t t;
+    srand((unsigned) time(&t));
 
     for(i = 0; i < n;i++) {
     	for(j = 0; j < n;j++) {
